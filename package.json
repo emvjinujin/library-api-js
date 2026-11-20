@@ -1,0 +1,14 @@
+{
+  "name": "library-api-js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/app.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3"
+  }
+}

@@ -1,4 +1,5 @@
 import { prisma } from "../db.js";
+import { findPage } from "./paging.js";
 
 export async function getAuthors(req, res, next) {
   try {
@@ -6,12 +7,13 @@ export async function getAuthors(req, res, next) {
     if (q !== undefined && (typeof q !== "string" || !q.trim())) {
       return res.status(400).json({ message: "q must be a non-empty string" });
     }
-    const authors = await prisma.author.findMany({
+    const result = await findPage(prisma.author, req.query, {
+      orderBy: { id: "asc" },
       where: q === undefined ? {} : {
         name: { contains: q.trim(), mode: "insensitive" },
       },
     });
-    res.json(authors);
+    res.json(result);
   } catch (error) {
     next(error);
   }

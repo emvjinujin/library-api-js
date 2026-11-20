@@ -1,4 +1,5 @@
 import { prisma } from "../db.js";
+import { findPage } from "./paging.js";
 
 
 function queryError(message) {
@@ -76,12 +77,12 @@ export function buildOrderBy(query) {
 
 export async function getBooks(req, res, next) {
   try {
-    const books = await prisma.book.findMany({
+    const result = await findPage(prisma.book, req.query, {
       where: buildWhere(req.query),
-      orderBy: buildOrderBy(req.query),
+      orderBy: [buildOrderBy(req.query), { id: "asc" }],
       include: { author: true }
     });
-    res.json(books);
+    res.json(result);
   } catch (error) {
     next(error);
   }
